@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.Title-M {
+    background-color: #000;
+}
+.main-title {
+    background-color: black;
+}

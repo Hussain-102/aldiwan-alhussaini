@@ -1,0 +1,488 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --bg-color: #fafafa;
+  --text-color: #000000;
+  --card-color: #f8f7f7;
+  --poem-color: #bababa;
+  --text3-color:#000000;
+  --line-color:#cccccc;
+
+
+}
+body.dark {
+  --bg-color: #181818;
+  --text-color: #fff;
+  --text2-color: #8a8a8a;
+  --card-color: #1d1d1d;
+  --poem-color: #ffffff0d;
+  --text3-color:#d2d1d1;
+  --line-color:#d2d1d149;
+}
+
+
+body {
+  font-family: 'IBM Plex Sans Asrabic', sans-serif;
+  background-color: var(--bg-color);
+display: flex;
+  flex-direction: column;
+  align-items: center; /* This centers child elements */
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Menus */
+
+.menu-container{
+  position:relative;
+  width: 100%;
+  max-width: 350px;
+  direction:rtl;
+  overflow-x: hidden
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  width: 100%;
+  height: 30px;
+  direction: rtl;
+  border-radius: 6px;
+  align-items: flex-end;    /* لضبط العناصر عمودياً داخل الـ 30px */
+  background-color: var(--bg-color);
+  box-sizing: border-box;
+}
+
+
+
+.home {
+  display: flex;      
+  background-color: var(--bg-color);
+        text-decoration: none;
+        display: flex;
+        border-radius: 8px;
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+        height: 50%;
+        border: none;
+        cursor:pointer;
+        font-family: "IBM Plex Sans Arabic";
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text-color);
+}
+.home:hover{background-color: var(--bg-color); opacity: 0.3; color: var(--text-color);}
+.home:active {font-weight: bold; font-size: 17px; color: var(--text-color);}
+
+
+/* Title */
+.titles{
+display: flex;
+flex-direction: column;
+gap: 2.5rem;
+width: 100%;
+overflow-x: hidden;
+color: var(--text-color);
+margin: 0 auto;
+
+}
+
+.main-title{
+  width: 100%;
+  font-size: 48px;
+  font-weight: bold;
+  font-family: "IBM Plex Sans Arabic";
+  text-align: center;
+  justify-content: center;
+  padding-top: 5rem;
+  padding-bottom: 0.5rem;
+  position: relative;
+  overflow-x: hidden;
+  color: var(--text3-color);
+
+}
+.poem-title{
+  width: 100%;
+  font-size: 32px;
+  font-weight: bold;
+  font-family: "IBM Plex Sans Arabic";
+  text-align: center;
+  justify-content: center;
+  padding-top: 5rem;
+  padding-bottom: 0.5rem;
+  position: relative;
+  overflow-x: hidden;
+  color: var(--text3-color);
+
+}
+.poem-info{
+  background-color: var(--poem-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-family: "IBM Plex Sans Arabic";
+  color: var(--text3-color);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.poem-count,.poem-name-inside{
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "IBM Plex Sans Arabic";
+  text-align: center;
+  justify-content: left;
+  padding-left: 20px;
+  overflow-x: hidden;
+  color: var(--text3-color);
+
+}
+
+
+
+/*Search + Grid Card*/
+
+.search-grid {
+  display:grid;
+  width: 100%;
+  justify-content: center;
+  justify-items: center;
+  margin: 0 auto;
+  overflow-x: hidden;
+
+}
+
+.searching{
+  user-select: text;
+  width: 100%;
+  min-width: 300px;
+  height: 25px;
+  border-radius: 6px;
+  padding: 10px 15px;
+  border: 1px solid rgba(65, 65, 65, 0.115);
+  background-color: #f0eef032;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  box-shadow: 0 1px 2px rgba(2, 2, 2, 0.11);
+  transition: color 0.3s, box-shadow 0.3s;
+
+
+}
+
+.searching:focus {
+  outline: none;
+  border-color: rgba(65, 65, 65, 0);
+  box-shadow: 0 0 5px rgba(97, 95, 95, 0.139);
+  background-color: #f0eef032;
+  color: var(--text-color);
+  
+}
+
+
+/* CARDS */
+.card-grid {
+  display: flex;
+  gap: 25px;
+  width: 100%;
+  direction: rtl;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin: 0 auto;
+  position: relative; /* Needed for proper excerpt positioning */
+  height: fit-content;
+  min-height: 500px;
+}
+
+.grid-one-poets {
+    border-radius: 11px;
+    width: 100%;
+    min-width: 301px;
+    align-items: center;
+    height: 96%;
+    max-height: 150px;
+    background: var(--card-color);
+    box-shadow:rgba(36, 37, 38, 0.08) 0px 6px 15px 0px;   
+    border: 1px solid rgba(128, 128, 128, 0.119); 
+}
+.grid-one-poems-slug {
+    border-radius: 11px;
+    width: 100%;
+    min-width: 301px;
+    align-items: center;
+    height: 96%;
+    max-height: 150px;
+    background: var(--card-color);
+    box-shadow:rgba(36, 37, 38, 0.08) 0px 6px 15px 0px;   
+    border: 1px solid rgba(128, 128, 128, 0.119); 
+}
+
+
+
+.card{
+  border-radius: 16px;
+  text-decoration: none;
+  max-height: fit-content;
+  cursor: default;
+}
+
+
+  .grid-one {
+    border-radius: 11px;
+    width: 100%;
+    min-width: 301px;
+    align-items: center;
+    height: 96%;
+    background: var(--card-color);
+    box-shadow:rgba(36, 37, 38, 0.08) 0px 6px 15px 0px;   
+    border: 1px solid rgba(128, 128, 128, 0.119); 
+    
+
+
+
+  }
+.card-name, card-name * {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  font-size: 1.375rem;
+  color: var(--text3-color);
+  width: 100%;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 70px;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+
+
+.card-count {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  font-size: 12px;
+  color: var(--text2-color);
+  text-decoration: none;
+  cursor: pointer;
+  padding-right: 10px;
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+
+.card-tag, card-tag * {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  font-size: 14px;
+  color: var(--text2-color);
+  text-decoration: none;
+  cursor: pointer;
+  padding-right: 10px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+.grid-one:hover {
+    transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.543);
+  transition: all 0.10s ease;
+}
+
+.Title-M {
+  font-size: 28px;
+}
+
+.poem-container {
+  position: relative;
+  background-color: var(--poem-color);
+  border-radius: 12px;
+  height: fit-content;
+  width: 100%;        /* العرض يعتمد على الحاوي */
+  max-width: 500px;   /* لا يتجاوز 500 بكسل */
+  box-sizing: border-box; /* لضبط الحشوة والحدود داخل العرض */
+}
+
+
+.verse-line {
+  font-size: 18px;
+  color: var(--text3-color);
+}
+
+.line-divider {
+  border: none;
+  border-top: 2px solid rgba(0, 0, 0, 0.13);
+  width: 45%;
+  opacity: 0.2;
+}
+
+
+@media (min-width: 320px) { /* xxs */
+  .font-controls p {
+    font-size: 12px; /* xxs:text-xs */
+  }
+}
+
+@media (min-width: 768px) { /* md */
+  .font-controls p {
+    font-size: 14px; /* md:text-sm */
+  }
+}
+
+@media (min-width: 1280px) { /* xl */
+  .font-controls p {
+    font-size: 16px; /* xl:text-lg */
+  }
+}
+
+@media (min-width: 1536px) { /* 2xl */
+  .font-controls p {
+    font-size: 18px; /* 2xl:text-xl */
+  }
+}
+
+
+
+@media (min-width: 768px) {
+  .grid-one {
+    max-width: 301px;
+  }
+}
+@media (min-width: 768px) {
+  .card-excerpt {
+    max-width: 301px;
+  }
+}
+
+.card-search {
+  background-color: #fffdf4;
+  border: 2px solid goldenrod;
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+  .poem-excerpt {
+    margin-top: 10px;
+    padding: 8px;
+    background: #f8f8f8;
+    border-radius: 4px;
+    font-family: 'Amiri', serif;
+    font-size: 0.95em;
+    line-height: 1.8;
+    white-space: pre-line;
+  }
+    .poem-excerpt mark {
+    background-color: #ffeb3b;
+    color: inherit;
+    padding: 0 2px;
+  }
+
+  .card-excerpt {
+  font-size: 0.95em;
+  color: #908d8d;
+  margin-top: 25px;
+
+  line-height: 1.8;
+  text-align: right;
+  border-top: 1px solid var(--line-color);
+  border-width: 32%;
+  height: 100%;
+  width: 320px;
+}
+
+.card-excerpt mark {
+  background-color: #ffe066;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.py-1 {
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-decoration: none;
+  cursor: text;
+  font-weight: 600;
+  display: inline-block;
+  padding-right: 10px;
+  justify-content: right;
+  align-items: right;
+  text-align: right;
+  height: 70px;}
+
+  .match-type-select {
+  display: flex;
+  margin-top: 10px;
+  padding-top: 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  background-color: var(--card-color);
+  color: var(--text3-color);
+  text-align: center;
+}
+
+.pagename {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  font-size: 14px;
+  color: var(--text2-color);
+  text-decoration: none;
+  cursor: pointer;
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+
+
+.pagination-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    }
+
+  .next {
+    background-color: var(--bg-color);
+    color: var(--text3-color);
+    padding: 0.5rem 1rem;
+    border-radius: 1px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: right;
+    justify-content: right;
+  }
+  .next:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+    .previous:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  .previous {
+    background-color: var(--bg-color);
+    color: var(--text3-color);
+    padding: 0.5rem 1rem;
+    border-radius: 1px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+  }
