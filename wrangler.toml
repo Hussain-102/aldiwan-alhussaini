@@ -10,6 +10,6 @@ upload_format = "service-worker"  # or "modules"
 directory = "static"
 binding = "ASSETS"
 
-[var]
+[vars]
 PUBLIC_SUPABASE_URL="https://npllhpweugxvzjpprlxt.supabase.co"
 PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wbGxocHdldWd4dnpqcHBybHh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxOTQzMTksImV4cCI6MjA2Nzc3MDMxOX0.CcbMCL0izYcmukksNl04juV_dEPd-rDcDsNrzJEdrCY"
