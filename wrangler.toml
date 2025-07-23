@@ -1,16 +1,11 @@
-name = "aldiwanalhussaini"
-compatibility_date = "2025-07-23"
-account_id = "c9c4c15ff4aa299d30a7ae6fc80d4631"
+name = "your-worker-name"
+main = "_worker.js"  # or _worker.js depending on your build
+
 
 [build]
-format = "service-worker"
-dir = ".svelte-kit/cloudflare"
-main = "_worker.js"
-upload = { dir = ".svelte-kit/cloudflare" }
+command = "npm run build"  # or "vite build", etc.
+upload_format = "service-worker"  # or "modules"
 
-compatibility_flags = ["nodejs_compat"]
-
-  [assets]
-  directory = "./build"
-
-
+[assets]
+directory = "static"
+binding = "ASSETS"
