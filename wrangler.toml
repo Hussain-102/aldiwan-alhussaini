@@ -4,7 +4,6 @@ main = "_worker.js"  # or _worker.js depending on your build
 
 [build]
 command = "npm run build"  # or "vite build", etc.
-upload_format = "service-worker"  # or "modules"
 
 [assets]
 directory = "static"
