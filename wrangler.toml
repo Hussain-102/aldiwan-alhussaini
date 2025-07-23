@@ -2,14 +2,15 @@ name = "aldiwanalhussaini"
 compatibility_date = "2025-07-23"
 account_id = "c9c4c15ff4aa299d30a7ae6fc80d4631"
 
-[build.upload]
+[build]
 format = "service-worker"
 dir = ".svelte-kit/cloudflare"
 main = "_worker.js"
+upload = { dir = ".svelte-kit/cloudflare" }
 
 compatibility_flags = ["nodejs_compat"]
 
+  [assets]
+  directory = "./build"
 
 
-[assets]
-directory = "build"
