@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-// import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'; // Comment out
 import { env } from '$env/dynamic/public'; // Import dynamic env
 import type { LayoutLoad } from './$types';
 
@@ -18,7 +17,7 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
       });
   // احصل على الجلسة والمستخدم
   const {
-    data: { session } 
+    data: { session }
   } = await supabase.auth.getSession();
 
   const {
@@ -26,5 +25,4 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
   } = await supabase.auth.getUser();
 
   return { session, supabase, user };
-
-}
+};
