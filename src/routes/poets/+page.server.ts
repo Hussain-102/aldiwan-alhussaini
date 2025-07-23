@@ -1,18 +1,21 @@
+// src/routes/poets/+page.server.ts
 import { createClient } from '@supabase/supabase-js';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import type { PageServerLoad } from './[slug]/$types';
+import { env } from '$env/dynamic/public'; // Import from dynamic/public
 
-const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+export const load = async ({ fetch }) => {
+    const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
+        global: { fetch },
+    });
 
-export const load: PageServerLoad = async () => {
-  const { data: poets, error } = await supabase
-    .from('poet')
-    .select('id, poet_name, slug');
+    // Your existing logic
+    const { data: poets, error } = await supabase
+        .from('poets')
+        .select('*');
 
-  if (error) {
-    console.error('خطأ في تحميل الشعراء:', error.message);
-    throw new Error('تعذّر تحميل قائمة الشعراء');
-  }
+    if (error) {
+        console.error('Error fetching poets:', error);
+        return { poets: [] };
+    }
 
-  return { poets };
+    return { poets };
 };
