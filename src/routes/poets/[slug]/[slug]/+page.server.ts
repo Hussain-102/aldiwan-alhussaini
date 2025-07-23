@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 import { env } from '$env/dynamic/public';
 import type { PageServerLoad } from './$types';
 
-const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY);
 
 export async function load({ params, fetch }) { 
     const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
