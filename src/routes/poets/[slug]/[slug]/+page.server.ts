@@ -4,9 +4,10 @@ import type { PageServerLoad } from './$types';
 
 const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY);
 
-
-export const load: PageServerLoad = async ({ params }) => {
-  const id = params.id;
+export async function load({ params, fetch }) { 
+    const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
+        global: { fetch },
+        }); 
 
   const { data, error } = await supabase
     .from('poems')
