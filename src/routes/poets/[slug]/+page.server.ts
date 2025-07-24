@@ -1,14 +1,12 @@
 // +page.ts
 import { error } from '@sveltejs/kit';
-import { createClient } from '@supabase/supabase-js';
-import { env } from '$env/dynamic/public'; 
+import { supabase } from '$lib/supabaseClient';
+
 
 
 export async function load({ params }) {
   const slug = params.slug;
-   const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
-    global: { fetch }, // Pass fetch for SSR to work correctly
-  });
+  
   // 1. Get the poet by slug
   const { data: poet, error: poetError } = await supabase
     .from('poet')

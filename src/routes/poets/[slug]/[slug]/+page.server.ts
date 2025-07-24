@@ -1,12 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
-import { env } from '$env/dynamic/public';
-import type { PageServerLoad } from './$types';
+import { supabase } from '$lib/supabaseClient'; 
+import { error as svelteKitError } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types'
+
 
 
 export async function load({ params, fetch }) { 
-    const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
-        global: { fetch },
-        }); 
+
 
   const { data, error } = await supabase
     .from('poems')
@@ -17,8 +16,8 @@ export async function load({ params, fetch }) {
         counts,
         slug,
            poet:poet_id (
-      poet_name,
-      slug
+            poet_name,
+            slug
     )
   `)    .eq('slug', params.slug)
     .single();

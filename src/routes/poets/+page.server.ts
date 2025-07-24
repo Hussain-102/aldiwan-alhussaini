@@ -1,21 +1,18 @@
-// src/routes/poets/+page.server.ts
-import { createClient } from '@supabase/supabase-js';
-import { env } from '$env/dynamic/public'; // Import from dynamic/public
+import { supabase } from '$lib/supabaseClient';
+import { error as svelteKitError } from '@sveltejs/kit';
 
-export const load = async ({ fetch }) => {
-    const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
-        global: { fetch },
-    });
+export const load = async () => {
+    console.log('Fetching poets on the server...');
 
-    // Your existing logic
     const { data: poets, error } = await supabase
-        .from('poets')
-        .select('*');
+        .from('poet')
+        .select('id, poet_name, slug')
+        .order('id');
 
     if (error) {
-        console.error('Error fetching poets:', error);
-        return { poets: [] };
+        console.error('Server error fetching poets:', error.message);
+        throw svelteKitError(500, 'Could not fetch the list of poets.');
     }
 
-    return { poets };
+    return { poets: poets ?? [] };
 };

@@ -1,28 +1,24 @@
+// src/routes/+layout.ts
+
 import { createClient } from '@supabase/supabase-js';
-import { env } from '$env/dynamic/public'; // Import dynamic env
+import { env } from '$env/dynamic/public';
 import type { LayoutLoad } from './$types';
 
-const isBrowser = typeof window !== 'undefined';
-
-export const load: LayoutLoad = async ({ data, depends, fetch }) => {
+export const load: LayoutLoad = async ({ fetch, depends }) => {
+  // This tells SvelteKit to re-run this load function when auth state changes
   depends('supabase:auth');
 
-  // Use dynamic env variables
-  const supabase = isBrowser
-    ? createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
-        global: { fetch }
-      })
-    : createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
-        global: { fetch },
-      });
-  // احصل على الجلسة والمستخدم
+  // For the root layout, creating a new client here is the recommended pattern.
+  // It ensures Supabase uses SvelteKit's fetch, which is crucial for auth.
+  const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
+    global: { fetch },
+  });
+
+  // Get the session information
   const {
-    data: { session }
+    data: { session },
   } = await supabase.auth.getSession();
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  return { session, supabase, user };
+  // You can return the whole session object, which includes the user.
+  return { supabase, session };
 };
