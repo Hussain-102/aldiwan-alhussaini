@@ -1,26 +1,21 @@
-// svelte.config.js
-import adapter from '@sveltejs/adapter-auto';
+import vercel from '@sveltejs/adapter-vercel';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    sveltekit(),
+    visualizer({
+      filename: 'stats.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
   kit: {
-    adapter: adapter()
+    adapter: vercel(), // use Vercel adapter
   },
-  vitePlugin: {
-    // Vite-specific config
-    plugins: [
-      tailwindcss(),
-      visualizer({
-        filename: 'stats.html',
-        open: true,
-        gzipSize: true,
-        brotliSize: true
-      })
-    ]
-  }
-};
-
-export default config;
+});
