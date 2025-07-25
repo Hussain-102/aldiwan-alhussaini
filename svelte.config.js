@@ -1,24 +1,26 @@
 // svelte.config.js
 import adapter from '@sveltejs/adapter-auto';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 import tailwindcss from '@tailwindcss/vite';
-import { visualizer } from 'rollup-plugin-visualizer'; // <-- Ensure this import is there
 
-export default defineConfig({
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+  kit: {
+    adapter: adapter()
+  },
+  vitePlugin: {
+    // Vite-specific config
     plugins: [
-        tailwindcss(),
-        sveltekit(),
-        // Make sure visualizer is NOT wrapped in a 'process.env.NODE_ENV === 'production' &&' check
-        // OR, if it is, ensure you run your build in production mode locally.
-        visualizer({
-            filename: 'stats.html', // This is the file name
-            open: true,              // This should open it automatically
-            gzipSize: true,          // Shows gzip sizes
-            brotliSize: true,        // Shows Brotli compressed sizes
-        }),
-    ],
-    kit: {
-        adapter: adapter()
-    }
-});
+      tailwindcss(),
+      visualizer({
+        filename: 'stats.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true
+      })
+    ]
+  }
+};
+
+export default config;
