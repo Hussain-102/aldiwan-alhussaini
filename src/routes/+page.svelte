@@ -1,102 +1,138 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import { createClient } from '@supabase/supabase-js';
 
-	// 1. Get ALL data from the server load function.
-	export let data;
-	$: ({ poems, supabase, currentPage, totalPages } = data);
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-	// --- Client-side search state ---
-	let query = '';
-	let searchResults = []; // Changed name for clarity
-	let loading = false;
-	let error = '';
-	let selectedMatchType = 'all';
-	let searchCurrentPage = 1;
-	// We'll need the RPC to return a total count for perfect pagination
-	let searchTotalPages = 1; 
-	let searchTimeout;
+  if (typeof window !== 'undefined') {
+    window.supabase = supabase;
+  }
 
-	// --- Search logic (This part is mostly the same) ---
-	function handleInput() {
-		clearTimeout(searchTimeout);
-		if (query.trim().length < 2) {
-			searchResults = [];
-			return;
-		}
-		searchCurrentPage = 1;
-		searchTimeout = setTimeout(() => {
-			executeSearch(searchCurrentPage);
-		}, 300);
-	}
+  export let data;
 
-	async function executeSearch(pageToFetch: number) {
-		if (!supabase) return;
-		loading = true;
-		error = '';
-		try {
-			// This RPC call is fine
-			const { data: searchData, error: err } = await supabase.rpc('search_poems_1', {
-				query_text: query,
-				match_type: selectedMatchType,
-				page_number: pageToFetch
-			});
-			if (err) throw err;
-			
-			// Assumes your RPC returns an object like { results: [], total_count: X }
-			searchResults = searchData.results || [];
-			const totalCount = searchData.total_count || 0;
-			searchTotalPages = Math.ceil(totalCount / 20); // 20 is your page size
+  let poems = data.poems;
+  let query = '';
+  let results = [];
+  let loading = false;
+  let error = '';
+  let selectedMatchType = 'all';
+  let searchTimeout;
 
-		} catch (e) {
-			console.error('Search error:', e);
-			error = 'حدث خطأ في البحث';
-		} finally {
-			loading = false;
-		}
-	}
-	
-	$: if (query.trim() && searchCurrentPage) {
-		executeSearch(searchCurrentPage);
-	}
-	
-	// --- Display & Pagination Logic ---
-	$: isSearching = query.trim().length > 0;
-	$: displayedPoems = isSearching ? searchResults : poems;
-	$: displayedPage = isSearching ? searchCurrentPage : currentPage;
-	$: displayedTotalPages = isSearching ? searchTotalPages : totalPages;
+  let currentPage = 1;
+  const pageSize = 20;
+  let totalCount = 0;
 
-	function goToNextPage() {
-		const nextPage = displayedPage + 1;
-		if (nextPage > displayedTotalPages) return;
-		if (isSearching) {
-			searchCurrentPage = nextPage;
-		} else {
-			goto(`/?page=${nextPage}`, { keepFocus: true });
-		}
-	}
+  // Reset page and debounce on new input
+  function handleInput() {
+    clearTimeout(searchTimeout);
 
-	function goToPreviousPage() {
-		const prevPage = displayedPage - 1;
-		if (prevPage < 1) return;
-		if (isSearching) {
-			searchCurrentPage = prevPage;
-		} else {
-			goto(`/?page=${prevPage}`, { keepFocus: true });
-		}
-	}
+    if (query.trim().length === 0) {
+      results = [];
+      currentPage = 1;
+      return;
+    }
 
-	// Your highlight and formatExcerpt functions can stay the same
-	function highlight(text: string | null | undefined, keyword: string): string {
-		if (!text) return '';
-		if (!keyword.trim()) return text;
-		const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		const regex = new RegExp(`(${escaped})`, 'gi');
-		return text.replace(regex, '<mark>$1</mark>');
-	}
-	function formatExcerpt(text: string): string {
-		if (!text) return '';
-		return `<span class="py-1">${text.trim().replace(/\*/g, ' — ')}</span>`;
-	}
+    if (query.trim().length < 2) {
+      return;
+    }
+
+    currentPage = 1;
+
+    searchTimeout = setTimeout(() => {
+      search();
+    }, 300);
+  }
+
+  // Highlight matches
+  function highlight(text: string | null | undefined, keyword: string): string {
+    if (!text) return '';
+    if (!keyword.trim()) return text;
+
+    try {
+      const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escaped})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    } catch (e) {
+      console.error('Highlight error:', e);
+      return text;
+    }
+  }
+
+  // Format excerpt text
+  function formatExcerpt(text: string, lineCount: number = 1): string {
+    if (!text) return '';
+    const replaced = text.trim().replace(/\*/g, ' — ');
+    return `<span class="py-1">${replaced}</span>`;
+  }
+
+  // Actual search call
+  async function search() {
+    if (!query.trim()) {
+      results = [];
+      return;
+    }
+
+    loading = true;
+    error = '';
+
+    try {
+      const { data: searchData, error: err } = await supabase.rpc('search_poems_1', {
+        query_text: query,
+        match_type: selectedMatchType,
+        page_number: currentPage
+      });
+
+      if (err) {
+        console.error('Supabase RPC error:', err);
+        error = err.message;
+      } else {
+        results = searchData || [];
+        // Optional: update totalCount if returned from Supabase
+        // totalCount = results[0]?.total_count || 0;
+      }
+    } catch (e) {
+      console.error('Exception during search:', e);
+      error = 'حدث خطأ في البحث';
+    } finally {
+      loading = false;
+    }
+  }
+
+  // Trigger search when page changes during search
+  $: if (query.trim() && currentPage !== 1) {
+    search();
+  }
+
+  // Data to show (results from search or normal poems)
+  $: displayedPoems = query.trim() ? results : poems;
+
+  // Pagination count
+  $: totalPages = query.trim()
+    ? 1000 // arbitrary large number, or use real totalCount if returned
+    : Math.ceil(poems.length / pageSize);
+
+  function getCardsForPage(page: number) {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return displayedPoems.slice(start, end);
+  }
+
+  // Only apply pagination for non-search
+  $: paginatedPoems = query.trim() ? results : getCardsForPage(currentPage);
+
+  function goToNextPage() {
+    if (currentPage < totalPages) {
+      currentPage++;
+    }
+  }
+
+  function goToPreviousPage() {
+    if (currentPage > 1) {
+      currentPage--;
+    }
+  }
 </script>
 
 <ul class="menu">
@@ -140,7 +176,7 @@
 {/if}
 
 <div class="card-grid">
-  {#each displayedPoems as poem}
+  {#each paginatedPoems as poem}
     <a href={`/poets/${poem.poet?.slug}/${poem.slug}`} class="card">
       <h3 class="grid-one">
         <p class="card-count">عدد الأبيات {poem.counts}</p>

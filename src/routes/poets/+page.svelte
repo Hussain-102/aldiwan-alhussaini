@@ -1,56 +1,79 @@
 <script lang="ts">
-  // Get data from the server load function. No more onMount!
-  export let data;
+  import { onMount } from 'svelte';
+  import { createClient } from '@supabase/supabase-js';
 
-  // Reactively get the list of poets and the supabase client
-  // The 'poets' array is now pre-loaded by your +page.server.ts
-  $: ({ poets, supabase } = data);
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  // --- Client-side search state ---
   let query = '';
-  let searchResults: { id: number; poet_name: string; slug: string }[] = [];
+  let results: { id: number; poet_name: string; slug: string }[] = [];
   let loading = false;
   let error = '';
   let searchTimeout: any;
 
-  // --- Client-side search logic ---
+  let poets: { id: number; poet_name: string; slug: string }[] = [];
+
+  onMount(async () => {
+    loading = true;
+    const { data, error: err } = await supabase
+      .from('poet')
+      .select('id, poet_name, slug')
+      .order('id');
+
+    if (err || !data) {
+      error = 'فشل تحميل الشعراء';
+      poets = [];
+      console.error(err);
+    } else {
+      poets = data;
+    }
+    loading = false;
+  });
+
   function handleInput() {
     clearTimeout(searchTimeout);
+
     if (query.trim().length < 2) {
-      searchResults = [];
+      results = [];
       return;
     }
+
     searchTimeout = setTimeout(() => {
       search();
     }, 300);
   }
 
   async function search() {
-    if (!supabase || !query.trim()) {
-      searchResults = [];
+    if (!query.trim()) {
+      results = [];
       return;
     }
+
     loading = true;
     error = '';
+
     try {
       const { data, error: err } = await supabase
         .from('poet')
         .select('id, poet_name, slug')
         .ilike('poet_name', `%${query}%`);
 
-      if (err) throw err;
-      searchResults = data ?? [];
-
-    } catch (e: any) {
-      error = 'Search failed.';
-      console.error(e);
+      if (err) {
+        error = 'فشل البحث';
+        console.error(err);
+      } else {
+        results = data ?? [];
+      }
+    } catch (e) {
+      console.error('Exception during search:', e);
+      error = 'حدث خطأ في البحث';
     } finally {
       loading = false;
     }
   }
 
-  // Display either search results or the full list from the server
-  $: displayedPoets = query.trim() ? searchResults : poets;
+  $: displayedPoets = query.trim() ? results : poets;
 </script>
 
 <ul class="menu">
