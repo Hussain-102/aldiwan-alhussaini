@@ -19,7 +19,7 @@ export async function load({ params, fetch }) {
             poet_name,
             slug
     )
-  `)    .eq('slug', params.slug)
+  `)    .eq('slug', params.poem_slug)
     .single();
 
   if (error) {
