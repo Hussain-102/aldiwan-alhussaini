@@ -1,4 +1,4 @@
-
+// + page.server.ts
 export async function load() {
     // Return empty data instantly without calling the database
     return {
