@@ -214,39 +214,6 @@
     border-radius: 4px;
   }
 
-  .search-excerpt {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 10px;
-    direction: rtl;
-  }
-
-  .search-excerpt :global(mark) {
-    background-color: yellow;
-    padding: 2px 4px;
-    border-radius: 2px;
-  }
-
-  .poem-excerpt {
-    margin-top: 15px;
-    padding: 10px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: 0.9em;
-    line-height: 1.6;
-  }
-
-  .poem-excerpt mark {
-    background-color: yellow;
-    padding: 0 2px;
-  }
-
-  .no-content {
-    color: #999;
-    font-style: italic;
-  }
-
   @media (min-width: 768px) {
     .card-excerpt {
       max-width: 301px;
