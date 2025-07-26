@@ -1,5 +1,5 @@
 <script lang="ts">
-  
+import Header from "$lib/components/header.svelte";
 export let data: {
     poem: {
       id: number;
@@ -33,6 +33,7 @@ export let data: {
   };
   // }
 </script>
+<Header />
 
 <!-- svelte-ignore css_unused_selector -->
 <style>
@@ -91,13 +92,6 @@ export let data: {
 
 
 
-<!-- القائمة الرئيسية -->
-<ul class="menu">
-  <li><a class="home" href="/">الرئيسيه</a></li>
-  <li><a class="home" href="#">المعصومين</a></li>
-  <li><a class="home" href="/poets">الشعراء</a></li>
-  <li><a class="home" href="#">الغرض</a></li>
-</ul>
 
 <!-- التحقق من وجود القصيدة -->
 {#if !data.poem}

@@ -18,4 +18,7 @@ export default defineConfig({
   kit: {
     adapter: vercel(), // use Vercel adapter
   },
+  env: {
+    publicprefix: 'PUBLIC_',
+  }
 });

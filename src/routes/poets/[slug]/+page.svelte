@@ -1,6 +1,8 @@
 <script lang="ts">
   import { createClient } from '@supabase/supabase-js';
   import { env } from '$env/dynamic/public';
+  import Header from '$lib/components/header.svelte';
+
 
 const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY); // <--- Correct usage
 
@@ -63,13 +65,11 @@ const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_
     error = '';
 
     try {
-      // نفترض عندك دالة RPC في Supabase باسم 'search_poems_1' للبحث
-      // يمكن تعديلها حسب الحاجة لتبحث في قصائد مرتبطه بالشاعر فقط
       const { data: searchData, error: err } = await supabase.rpc('search_poems_1', {
         query_text: query,
         page_number: 1,
         match_type: selectedMatchType,
-        poet_slug: poet.slug // تمرير الشاعر لتحديد البحث فقط في قصائده أو المرتبطة به
+        poet_slug: poet.slug
       });
 
       if (err) {
@@ -87,12 +87,8 @@ const supabase = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_
   }
 </script>
 
-<ul class="menu">
-  <li><a class="home" href="/">الرئيسيه</a></li>
-  <li><a class="home" href="/">المعصومين</a></li>
-  <li><a class="home" href="/poets">الشعراء</a></li>
-  <li><a class="home" href="/">الغرض</a></li>
-</ul>
+<Header />
+
 
 <div class="title">
   <h1 class="main-title"> {poet.poet_name}</h1>

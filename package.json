@@ -12,12 +12,15 @@
     "format": "prettier --write .",
     "lint": "prettier --check .",
     "test:unit": "vitest",
-    "test": "npm run test:unit -- --run"
+    "test": "npm run test:unit -- --run",
+    "vercel-build": "npm run build",
+  "debug-build": "echo 'Node version:' && node -v && echo 'NPM version:' && npm -v && echo 'Environment variables:' && echo 'PUBLIC_SUPABASE_URL:' $PUBLIC_SUPABASE_URL && echo 'PUBLIC_SUPABASE_ANON_KEY:' ${PUBLIC_SUPABASE_ANON_KEY:0:10}... && npm run build"
+
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
     "@sveltejs/adapter-vercel": "^5.8.1",
-    "@sveltejs/kit": "^2.22.0",
+    "@sveltejs/kit": "^2.26.1",
     "@sveltejs/vite-plugin-svelte": "^6.0.0",
     "@tailwindcss/typography": "^0.5.15",
     "@tailwindcss/vite": "^4.0.0",
@@ -48,9 +51,11 @@
     "@supabase/supabase-js": "^2.50.5",
     "@sveltejs/adapter-auto": "^6.0.1",
     "@tailwindcss/cli": "^4.1.11",
+    "bufferutil": "^4.0.9",
     "drizzle-orm": "^0.44.2",
     "mode-watcher": "^1.1.0",
     "postgres": "^3.4.7",
-    "svelte-search": "^2.1.1"
+    "svelte-search": "^2.1.1",
+    "utf-8-validate": "^6.0.5"
   }
 }

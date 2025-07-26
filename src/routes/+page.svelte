@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { createClient } from '@supabase/supabase-js';
+  import Header from '$lib/components/header.svelte';
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
@@ -135,12 +136,7 @@
   }
 </script>
 
-<ul class="menu">
-  <li><a class="home" href="/">الرئيسيه</a></li>
-  <li><a class="home" href="/tags">المصابيح</a></li>
-  <li><a class="home" href="/poets">الشعراء</a></li>
-  <li><a class="home" href="#">الغرض</a></li>
-</ul>
+<Header />
 
 <div class="title">
   <title class="title-bar">aldiwan</title>
